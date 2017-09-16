@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package service;
+
+service Zsync {
+  rpc Exists(Dataset) returns (Dataset);
+  rpc GetSnapshotsFor(Dataset) returns (DatasetList);
+  rpc GetFilesystems(Empty) returns (DatasetList);
+}
+
+message Empty {
+
+}
+
+message Dataset {
+  string name = 1;
+}
+
+message DatasetList {
+  repeated Dataset list = 1;
+} 
