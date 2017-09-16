@@ -1,16 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"log"
-	pb "zsync/service"
-
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"log"
+	pb "zsync/service"
 )
 
 func main() {
-	conn, err := grpc.Dial("127.0.0.1:8089", grpc.WithInsecure())
+	server := flag.String("s", "127.0.0.1", "server to connect")
+	port := flag.Int("p", 8089, "sever port to connect")
+	flag.Parse()
+
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", *server, *port), grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatal(err)
