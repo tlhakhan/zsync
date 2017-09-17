@@ -14,16 +14,17 @@ import (
 func main() {
 	server := flag.String("s", "127.0.0.1", "server to connect")
 	port := flag.Int("p", 8089, "sever port to connect")
+	zpool := flag.String("-Z", "zones", "zpool to sync")
 	flag.Parse()
 
 	// start up a zfs daemon
 	zfsD := zfs.NewDaemon(*zpool)
 
-	for !zfsD.ready {
+	for !zfsD.Ready {
 		// block
 	}
 
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", *server, *port), grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", *server, *port), grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatal(err)
