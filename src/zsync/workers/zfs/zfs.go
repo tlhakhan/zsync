@@ -19,10 +19,11 @@ type Daemon struct {
 	// all zfs strings
 	Filesystems pb.DatasetList
 	Snapshots   pb.DatasetList
+	ready       bool
 }
 
 func NewDaemon(pool string) *Daemon {
-	d := &Daemon{Pool: pool}
+	d := &Daemon{Pool: pool, ready: false}
 	go d.run()
 	return d
 }
@@ -62,6 +63,7 @@ func (d *Daemon) processOutput(work string, fsType int) {
 		log.Println("Adding zfs snapshots to Daemon struct.")
 		d.Snapshots = dsl
 	}
+	d.ready = true
 }
 
 func (d *Daemon) ListFilesystems() *pb.DatasetList {

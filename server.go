@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"net"
-	"zsync/server/workers/zfs"
 	pb "zsync/service"
+	"zsync/workers/zfs"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
