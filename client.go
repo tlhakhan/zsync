@@ -36,14 +36,14 @@ func main() {
 
 	// ask existence
 
-	for _, filesystem := range zfsD.Filesystems {
+	for _, filesystem := range zfsD.Filesystems.List {
 		log.Println("Asking for existence of zfs filesystem: ", filesystem.Name)
 		// ask questions
-		response, err := c.Exists(context.Background(), &pb.Empty{})
+		response, err := c.Exists(context.Background(), filesystem)
 		if err != nil {
 			log.Fatal(err)
 		}
-		if response.Name == nil {
+		if response.Name == "" {
 			log.Println("Server did not find your zfs filesystem.")
 		} else {
 			log.Println("Server found your zfs filesystem.")
