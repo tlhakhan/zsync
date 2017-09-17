@@ -1,1 +1,5 @@
+src/sourcegraph.com
+src/golang.org
+src/github.com
 pkg/
+bin/
