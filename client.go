@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sync"
 	"flag"
 	"fmt"
 	"log"
@@ -35,23 +36,26 @@ func main() {
 	c := pb.NewZsyncClient(conn)
 
 	// ask existence
-
+	var wg sync.WaitGroup
+	wg.Add(len(zfsD.Filesystems.List))
+	fmt.Println(len(zfsD.Filesystems.List))
 	for _, filesystem := range zfsD.Filesystems.List {
+		go func(filesystem *pb.Dataset, wg *sync.WaitGroup) {
+			defer wg.Done()
 
-		go func() {
-			log.Printf("%s do you have %s?", *server, filesystem.Name)
 			// ask questions
 			response, err := c.Exists(context.Background(), filesystem)
 			if err != nil {
 				log.Fatal(err)
 			}
 			if response.Name == "" {
-				log.Println("%s found %s.", *server, response.Name)
+				log.Printf("%s didn't find %s.", *server, filesystem.Name)
 			} else {
-				log.Println("%s didn't find %s."*server, filesystem.Name)
+				log.Printf("%s found %s.", *server, filesystem.Name)
 			}
-		}
+		}(filesystem, &wg)
 	}
+	wg.Wait();
 	/*
 
 
